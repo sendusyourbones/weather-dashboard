@@ -29,7 +29,7 @@ function showHistory() {
 
 function clearHistory() {
     localStorage.clear();
-    searchHistoryEl.innerHTML = '';
+    location.reload();
 }
 
 function getLatLon() {
