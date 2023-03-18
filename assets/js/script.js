@@ -33,10 +33,6 @@ function clearHistory() {
 }
 
 function getLatLon() {
-    currentEl.innerHTML = '';
-    forecastHeadEl.setAttribute('class', 'hidden');
-    forecastRowEl.innerHTML = '';
-
     const cityInput = document.getElementById('city').value;
 
     const requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${ cityInput }&limit=1&appid=c5d162e25c0efc91cbc5528544ce5b89`;
@@ -67,6 +63,8 @@ function addToHistory(cityName, lat, lon) {
 }
 
 function getCurrentWeather(lat, lon) {
+    currentEl.innerHTML = '';
+
     const requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=c5d162e25c0efc91cbc5528544ce5b89`;
 
     fetch(requestUrl)
@@ -80,11 +78,13 @@ function getCurrentWeather(lat, lon) {
                 <p>Wind: ${data.wind.speed} MPH</p>
                 <p>Humidity: ${data.main.humidity}%</p>
             `;
-
         });
 }
 
 function getForecast(lat, lon) {
+    forecastHeadEl.setAttribute('class', 'hidden');
+    forecastRowEl.innerHTML = '';
+
     const requestUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=c5d162e25c0efc91cbc5528544ce5b89`;
     
     fetch(requestUrl)
@@ -136,6 +136,17 @@ function getDate(timeSec, offsetSec) {
     return dateTimeOffset.toLocaleDateString();
 }
 
-checkStorage();
+function searchFromHistory(event) {
+    const clickedEl = event.target;
+    if (clickedEl.matches('button')) {
+        const clickedCityObj = searchHistoryArr.find((element) => element.city === clickedEl.textContent);
+        getCurrentWeather(clickedCityObj.lat, clickedCityObj.lon);
+        getForecast(clickedCityObj.lat, clickedCityObj.lon);
+    }
+}
+
 searchButton.addEventListener('click', getLatLon);
 clearButton.addEventListener('click', clearHistory);
+searchHistoryEl.addEventListener('click', searchFromHistory);
+
+checkStorage();
