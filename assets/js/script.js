@@ -80,8 +80,10 @@ function getCurrentWeather(lat, lon) {
             return response.json();
         })
         .then(function (data) {
+            console.log(data);
             currentEl.innerHTML = `
                 <h2>${ data.name } (${ getDate(data.dt, data.timezone) })</h2>
+                <img src="https://openweathermap.org/img/wn/${ data.weather[0].icon }@2x.png"/>
                 <p>Temp: ${data.main.temp}\u00B0 F</p>
                 <p>Wind: ${data.wind.speed} MPH</p>
                 <p>Humidity: ${data.main.humidity}%</p>
