@@ -37,6 +37,8 @@ function getLatLon() {
 
     const requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${ cityInput }&limit=1&appid=c5d162e25c0efc91cbc5528544ce5b89`;
 
+    document.getElementById('city').value = '';
+
     fetch(requestUrl)
         .then(function (response) {
             return response.json();
