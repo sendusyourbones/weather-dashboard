@@ -1,9 +1,6 @@
 const searchButton = document.getElementById('search-btn');
 const searchHistoryEl = document.getElementById('search-history');
-const cityEl = document.getElementById('city-header');
-const currentTempEl = document.getElementById('current-temp');
-const currentWindEl = document.getElementById('current-wind');
-const currentHumEl = document.getElementById('current-humidity');
+const currentEl = document.getElementById('current');
 const forecastRowEl = document.getElementById('forecast-row');
 
 function getCurrentWeather(lat, lon) {
@@ -14,15 +11,12 @@ function getCurrentWeather(lat, lon) {
             return response.json();
         })
         .then(function (data) {
-            const cityName = data.name;
-            const cityDate = getDate(data.dt, data.timezone);
-            cityEl.textContent = `${cityName} (${cityDate})`;
-            const currentTemp = data.main.temp;
-            currentTempEl.textContent = `Temp: ${currentTemp}\u00B0 F`;
-            const currentWind = data.wind.speed;
-            currentWindEl.textContent = `Wind: ${currentWind} MPH`;
-            const currentHumidity = data.main.humidity;
-            currentHumEl.textContent = `Humidity: ${currentHumidity}%`;
+            currentEl.innerHTML = `
+                <h2>${ data.name } (${ getDate(data.dt, data.timezone) })</h2>
+                <p>Temp: ${data.main.temp}\u00B0 F</p>
+                <p>Wind: ${data.wind.speed} MPH</p>
+                <p>Humidity: ${data.main.humidity}%</p>
+            `;
         });
 }
 
@@ -39,14 +33,19 @@ function getForecast(lat, lon) {
                 forecastArray.push(data.list[i]);
             }
             for (let i = 0; i < 5; i++) {
-                const forecastEl = document.getElementById(`day-${ i + 1 }`);
+                const forecastEl = document.createElement('div');
+                forecastEl.setAttribute('id', `day-${ i + 1 }`);
+                forecastEl.setAttribute('class', `col-xs-10 col-lg day`);
+
                 const forecastDate = getDate(forecastArray[i].dt, data.city.timezone);
-                forecastEl.innerHTML = 
-                    `<h4>${forecastDate}</h4>
+
+                forecastEl.innerHTML = `
+                    <h4>${ forecastDate }</h4>
                     <img src="https://openweathermap.org/img/wn/${ forecastArray[i].weather[0].icon }@2x.png"/>
                     <p>Temp: ${ forecastArray[i].main.temp }\u00B0 F</p>
                     <p>Wind: ${ forecastArray[i].wind.speed } MPH</p>
-                    <p>Humidity: ${ forecastArray[i].main.humidity }%</p>`;
+                    <p>Humidity: ${ forecastArray[i].main.humidity }%</p>
+                `;
                 forecastRowEl.appendChild(forecastEl);
             }
         });
