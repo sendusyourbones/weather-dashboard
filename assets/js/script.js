@@ -1,4 +1,5 @@
 const searchButton = document.getElementById('search-btn');
+const clearButton = document.getElementById('clear-btn');
 const searchHistoryEl = document.getElementById('search-history');
 const currentEl = document.getElementById('current');
 const forecastHeadEl = document.getElementById('forecast-header');
@@ -24,6 +25,11 @@ function createCityButton(cityName) {
 
 function showHistory() {
     searchHistoryArr.forEach((element) => createCityButton(element.city));
+}
+
+function clearHistory() {
+    localStorage.clear();
+    searchHistoryEl.innerHTML = '';
 }
 
 function getLatLon() {
@@ -132,3 +138,4 @@ function getDate(timeSec, offsetSec) {
 
 checkStorage();
 searchButton.addEventListener('click', getLatLon);
+clearButton.addEventListener('click', clearHistory);
