@@ -4,6 +4,28 @@ const currentEl = document.getElementById('current');
 const forecastHeadEl = document.getElementById('forecast-header');
 const forecastRowEl = document.getElementById('forecast-row');
 
+let searchHistoryArr = JSON.parse(localStorage.getItem('searchHistory'));
+
+function checkStorage() {
+    if (!searchHistoryArr) {
+        searchHistoryArr = [];
+    } else {
+        showHistory();
+    }
+}
+
+function createCityButton(cityName) {
+    const cityButton = document.createElement('button');
+    cityButton.setAttribute('type', 'button');
+    cityButton.setAttribute('class', 'btn btn-secondary');
+    cityButton.textContent = cityName;
+    searchHistoryEl.appendChild(cityButton);
+}
+
+function showHistory() {
+    searchHistoryArr.forEach((element) => createCityButton(element.city));
+}
+
 function getLatLon() {
     currentEl.innerHTML = '';
     forecastHeadEl.setAttribute('class', 'hidden');
@@ -20,7 +42,22 @@ function getLatLon() {
         .then(function (data) {
             getCurrentWeather(data[0].lat, data[0].lon);
             getForecast(data[0].lat, data[0].lon);
+            addToHistory(data[0].name, data[0].lat, data[0].lon);
         });
+}
+
+function addToHistory(cityName, lat, lon) {
+    const currentSearchObj = {};
+
+    currentSearchObj.city = cityName;
+    currentSearchObj.lat = lat;
+    currentSearchObj.lon = lon;
+
+    searchHistoryArr.push(currentSearchObj);
+
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
+
+    createCityButton(cityName);
 }
 
 function getCurrentWeather(lat, lon) {
@@ -56,10 +93,9 @@ function getForecast(lat, lon) {
             for (let i = 7; i < 40; i += 8) {
                 forecastArray.push(data.list[i]);
             }
-            
+
             for (let i = 0; i < 5; i++) {
                 const forecastEl = document.createElement('div');
-                forecastEl.setAttribute('id', `day-${ i + 1 }`);
                 forecastEl.setAttribute('class', `col-xs-10 col-lg day`);
 
                 const forecastDate = getDate(forecastArray[i].dt, data.city.timezone);
@@ -94,4 +130,5 @@ function getDate(timeSec, offsetSec) {
     return dateTimeOffset.toLocaleDateString();
 }
 
+checkStorage();
 searchButton.addEventListener('click', getLatLon);
