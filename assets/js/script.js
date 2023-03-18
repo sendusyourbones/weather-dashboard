@@ -1,7 +1,27 @@
 const searchButton = document.getElementById('search-btn');
 const searchHistoryEl = document.getElementById('search-history');
 const currentEl = document.getElementById('current');
+const forecastHeadEl = document.getElementById('forecast-header');
 const forecastRowEl = document.getElementById('forecast-row');
+
+function getLatLon() {
+    currentEl.innerHTML = '';
+    forecastHeadEl.setAttribute('class', 'hidden');
+    forecastRowEl.innerHTML = '';
+
+    const cityInput = document.getElementById('city').value;
+
+    const requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${ cityInput }&limit=1&appid=c5d162e25c0efc91cbc5528544ce5b89`;
+
+    fetch(requestUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            getCurrentWeather(data[0].lat, data[0].lon);
+            getForecast(data[0].lat, data[0].lon);
+        });
+}
 
 function getCurrentWeather(lat, lon) {
     const requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=c5d162e25c0efc91cbc5528544ce5b89`;
@@ -17,6 +37,7 @@ function getCurrentWeather(lat, lon) {
                 <p>Wind: ${data.wind.speed} MPH</p>
                 <p>Humidity: ${data.main.humidity}%</p>
             `;
+
         });
 }
 
@@ -28,10 +49,14 @@ function getForecast(lat, lon) {
             return response.json();
         })
         .then(function (data) {
+            forecastHeadEl.setAttribute('class', 'visible');
+
             const forecastArray = [];
+
             for (let i = 7; i < 40; i += 8) {
                 forecastArray.push(data.list[i]);
             }
+            
             for (let i = 0; i < 5; i++) {
                 const forecastEl = document.createElement('div');
                 forecastEl.setAttribute('id', `day-${ i + 1 }`);
@@ -68,3 +93,5 @@ function getDate(timeSec, offsetSec) {
     // Return date string from this new Date object
     return dateTimeOffset.toLocaleDateString();
 }
+
+searchButton.addEventListener('click', getLatLon);
