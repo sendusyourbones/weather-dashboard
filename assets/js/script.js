@@ -1,6 +1,7 @@
 const searchButton = document.getElementById('search-btn');
 const clearButton = document.getElementById('clear-btn');
 const searchHistoryEl = document.getElementById('search-history');
+const noMatchesEl = document.getElementById('no-matches');
 const currentEl = document.getElementById('current');
 const forecastHeadEl = document.getElementById('forecast-header');
 const forecastRowEl = document.getElementById('forecast-row');
@@ -44,9 +45,13 @@ function getLatLon() {
             return response.json();
         })
         .then(function (data) {
-            getCurrentWeather(data[0].lat, data[0].lon);
-            getForecast(data[0].lat, data[0].lon);
-            addToHistory(data[0].name, data[0].lat, data[0].lon);
+            if (data.length === 0) {
+                noMatchesEl.textContent = `Sorry, we could not find any cities matching ${ cityInput }. Please try again. (Note: You must search for a city by name)`
+            } else {
+                getCurrentWeather(data[0].lat, data[0].lon);
+                getForecast(data[0].lat, data[0].lon);
+                addToHistory(data[0].name, data[0].lat, data[0].lon);
+            }  
         });
 }
 
@@ -66,6 +71,7 @@ function addToHistory(cityName, lat, lon) {
 
 function getCurrentWeather(lat, lon) {
     currentEl.innerHTML = '';
+    noMatchesEl.textContent = '';
 
     const requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=c5d162e25c0efc91cbc5528544ce5b89`;
 
