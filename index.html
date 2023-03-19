@@ -16,22 +16,23 @@
         <div class="container">
             <div class="row">
                 <!-- Sidebar -->
-                <section id="sidebar" class="col-3">
+                <section id="sidebar" class="col-sm-12 col-lg-4">
                     <!-- Search bar -->
                     <h2>Search for a City:</h2>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="city" name="city">
                         <button type="button" class="btn btn-primary" id="search-btn">Search</button>
                     </div>
+                    <!-- Text when no matches are found -->
+                    <p id="no-matches"></p>
                     <hr/>
                     <!-- Search history -->
                     <div id="search-history"></div>
+                    <hr/>
                     <button type="button" class="btn btn-success" id="clear-btn">Clear History</button>
                 </section>
                 <!-- Weather -->
-                <section id="city-weather" class="col-9">
-                    <!-- Text when no matches are found -->
-                    <p id="no-matches"></p>
+                <section id="city-weather" class="col-sm-12 col-lg-8">
                     <!-- Current weather -->
                     <div id="current"></div>
                     <!-- 5-day forecast -->

@@ -1,0 +1,48 @@
+header {
+    background-color: #34a4eb;
+    padding: 10px;
+}
+
+main {
+    margin-top: 20px;
+}
+
+h3 {
+    margin-top: 20px;
+}
+
+.day {
+    background-color: #2a374f;
+    color: white;
+    margin: 10px;
+    max-width: fit-content;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+#no-matches {
+    color: red;
+}
+
+#search-history button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#clear-btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+#current-inner {
+    border: solid;
+    padding-left: 10px;
+}

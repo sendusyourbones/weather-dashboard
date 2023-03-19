@@ -82,11 +82,13 @@ function getCurrentWeather(lat, lon) {
         .then(function (data) {
             console.log(data);
             currentEl.innerHTML = `
-                <h2>${ data.name } (${ getDate(data.dt, data.timezone) })</h2>
-                <img src="https://openweathermap.org/img/wn/${ data.weather[0].icon }@2x.png"/>
-                <p>Temp: ${data.main.temp}\u00B0 F</p>
-                <p>Wind: ${data.wind.speed} MPH</p>
-                <p>Humidity: ${data.main.humidity}%</p>
+                <div id="current-inner">
+                    <h4>${ data.name } (${ getDate(data.dt, data.timezone) })</h4>
+                    <img src="https://openweathermap.org/img/wn/${ data.weather[0].icon }@2x.png"/>
+                    <p>Temp: ${data.main.temp}\u00B0 F</p>
+                    <p>Wind: ${data.wind.speed} MPH</p>
+                    <p>Humidity: ${data.main.humidity}%</p>
+                </div>
             `;
         });
 }
@@ -112,7 +114,7 @@ function getForecast(lat, lon) {
 
             for (let i = 0; i < 5; i++) {
                 const forecastEl = document.createElement('div');
-                forecastEl.setAttribute('class', `col-xs-10 col-lg day`);
+                forecastEl.setAttribute('class', 'col-sm-auto day');
 
                 const forecastDate = getDate(forecastArray[i].dt, data.city.timezone);
 
