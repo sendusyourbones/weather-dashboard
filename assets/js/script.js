@@ -44,7 +44,7 @@ function getLatLon() {
     // Generate API request URL based on city entered in search
     const cityInput = document.getElementById('city').value;
 
-    const requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=1&appid=c5d162e25c0efc91cbc5528544ce5b89`;
+    const requestUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=1&appid=c5d162e25c0efc91cbc5528544ce5b89`;
 
     // Clear search field
     document.getElementById('city').value = '';
